@@ -31,27 +31,31 @@ def enterData():
         )
 
         continuar = int(input("Para ingresar una nueva persona escriba 1, si no 0: "))
+    return personas
+    
 
-    total_edad = sum(persona["Edad"] for persona in personas)
-    total_monto = sum(persona["Monto_declarar"] for persona in personas)
-    num_personas = len(personas)
-
-    promedio_edad = total_edad / num_personas if num_personas > 0 else 0
-    promedio_monto = total_monto / num_personas if num_personas > 0 else 0
-
-    edad_minima = min(persona["Edad"] for persona in personas)
-    monto_minimo = min(persona["Monto_declarar"] for persona in personas)
-
+def edadMaxima(personas):
     edad_maxima = max(persona["Edad"] for persona in personas)
+    return edad_maxima
+
+def edadPromedio(personas):    
+    num_personas = len(personas)
+    total_edad = sum(persona["Edad"] for persona in personas)
+    promedio_edad = total_edad / num_personas if num_personas > 0 else 0
+    return promedio_edad
+
+def promedioMonto(personas):
+    num_personas = len(personas)
+    total_monto = sum(persona["Monto_declarar"] for persona in personas)
+    promedio_monto = total_monto / num_personas if num_personas > 0 else 0
+    return promedio_monto
+ 
+def edadMinima(personas):
+    edad_minima = min(persona["Edad"] for persona in personas)
+    return edad_minima
+   
+def montoMaximo(personas):
     monto_maximo = max(persona["Monto_declarar"] for persona in personas)
-
-    print("Promedio de edad:", promedio_edad)
-    print("Promedio de monto a declarar:", promedio_monto)
-    print("Total de personas inscriptas:", num_personas)
-    print("La edad más chica es:", edad_minima)
-    print("La edad más alta es:", edad_maxima)
-    print("El monto más bajo a declarar es:", monto_minimo)
-    print("El monto más alto a declarar es:", monto_maximo)
+    return monto_maximo
 
 
-enterData()
