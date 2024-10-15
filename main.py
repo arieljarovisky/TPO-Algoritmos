@@ -1,19 +1,13 @@
-import index
 
-personas = index.enterData()
 
-promedio_edad = index.edadPromedio(personas)
-promedio_monto = index.promedioMonto(personas)
-num_personas = len(personas)
-edad_minima = index.edadMinima(personas)
-edad_maxima = index.edadMaxima(personas)
-monto_minimo = min(persona["Monto_declarar"] for persona in personas)
-monto_maximo = index.montoMaximo(personas)
+from sistema.sistema import Sistema 
 
-print("Promedio de edad:", promedio_edad)
-print("Promedio de monto a declarar:", promedio_monto)
-print("Total de personas inscriptas:", num_personas)
-print("La edad más chica es:", edad_minima)
-print("La edad más alta es:", edad_maxima)
-print("El monto más bajo a declarar es:", monto_minimo)
-print("El monto más alto a declarar es:", monto_maximo)
+sistema = Sistema()
+
+sistema.ingresar_datos()
+
+print("Edad máxima:", sistema.edad_maxima())
+print("Edad mínima:", sistema.edad_minima())
+print("Promedio de edad:", sistema.edad_promedio())
+print("Promedio de monto a declarar:", sistema.monto_promedio())
+print("Monto máximo a declarar:", sistema.monto_maximo())
