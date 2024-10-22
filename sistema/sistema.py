@@ -1,28 +1,34 @@
-import mysql.connector
+import pymysql
 from personas.persona import Persona
 import uuid
 from datetime import datetime
 
+
 class Sistema:
     def __init__(self):
         self.personas = []
-        self.db_connection = self.connect_db()  # Establecer la conexión a la base de datos
+        self.db_connection = (
+            self.connect_db()
+        )  # Establecer la conexión a la base de datos
 
     def connect_db(self):
         try:
-            # Intentamos conectar a la base de datos
-            connection = mysql.connector.connect(
-                host="localhost",          
-                user="root",               
-                password="",
-                database="tpopersonas"    
+            print("Intentando conectar a la base de datos...")
+            connection = pymysql.connect(
+                host="localhost",
+                user="root",
+                password="26052104",
+                database="tpopersonas",
+                port=3306,
             )
             print("Conexión exitosa a la base de datos.")
             return connection
-        except mysql.connector.Error as err:
-            # Si ocurre un error, lo mostramos
+        except pymysql.Error as err:
             print(f"Error al conectar a la base de datos: {err}")
-            return None    
+            return None
+        except Exception as e:
+            print(f"Ocurrió un error inesperado: {e}")
+            return None
 
     def agregar_persona(self):
         nombre = input("Ingrese nombre: ")
@@ -35,10 +41,17 @@ class Sistema:
         monto_declarar = float(input("Ingrese monto a declarar: "))
         origen_fondos = input("Ingrese origen de fondos: ")
         nueva_persona = Persona(
-            nombre, apellido, edad, fecha_nacimiento, dni, profesion, 
-            fecha_declaracion, monto_declarar, origen_fondos
+            nombre,
+            apellido,
+            edad,
+            fecha_nacimiento,
+            dni,
+            profesion,
+            fecha_declaracion,
+            monto_declarar,
+            origen_fondos,
         )
-        
+
         self.insert_persona_db(nueva_persona)
 
         self.personas.append(nueva_persona)
@@ -51,8 +64,12 @@ class Sistema:
 
             cursor = self.db_connection.cursor()
 
-            fecha_nacimiento = datetime.strptime(persona.fecha_nacimiento, "%d/%m/%Y").date()
-            fecha_declaracion = datetime.strptime(persona.fecha_declaracion, "%d/%m/%Y").date()
+            fecha_nacimiento = datetime.strptime(
+                persona.fecha_nacimiento, "%d/%m/%Y"
+            ).date()
+            fecha_declaracion = datetime.strptime(
+                persona.fecha_declaracion, "%d/%m/%Y"
+            ).date()
 
             persona_id = str(uuid.uuid4())
 
@@ -61,25 +78,54 @@ class Sistema:
                 VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
             """
             values = (
-                persona_id, persona.nombre, persona.apellido, persona.edad,
-                fecha_nacimiento, persona.dni, persona.profesion, fecha_declaracion,
-                persona.monto_declarar, persona.origen_fondos
+                persona_id,
+                persona.nombre,
+                persona.apellido,
+                persona.edad,
+                fecha_nacimiento,
+                persona.dni,
+                persona.profesion,
+                fecha_declaracion,
+                persona.monto_declarar,
+                persona.origen_fondos,
             )
 
-            # Ejecutar la consulta
             cursor.execute(query, values)
             self.db_connection.commit()
 
-            print(f"Persona {persona.nombre} {persona.apellido} agregada a la base de datos.")
-        except mysql.connector.Error as err:
+            print(
+                f"Persona {persona.nombre} {persona.apellido} agregada a la base de datos."
+            )
+        except pymysql.connect.Error as err:
             print(f"Error al insertar datos: {err}")
+
+    def obtener_personas_db(self):
+        if not self.db_connection:
+            print("No hay conexión a la base de datos.")
+            return []
+
+        cursor = self.db_connection.cursor()
+        query = "SELECT nombre, apellido, edad, fecha_nacimiento, dni, profesion, fecha_declaracion, monto_declarar, origen_fondos FROM persona"
+        cursor.execute(query)
+        result = cursor.fetchall()
+
+        personas = []
+        for row in result:
+            persona = Persona(*row)
+            personas.append(persona)
+
+        return personas
 
     def ingresar_datos(self):
         print("Ingreso")
-        continuar = int(input("Si quiere ingresar al sistema apriete el 1, para salir ingrese 0: "))
+        continuar = int(
+            input("Si quiere ingresar al sistema apriete el 1, para salir ingrese 0: ")
+        )
         while continuar != 0:
             self.agregar_persona()
-            continuar = int(input("Para ingresar una nueva persona escriba 1, si no 0: "))
+            continuar = int(
+                input("Para ingresar una nueva persona escriba 1, si no 0: ")
+            )
 
     def edad_maxima(self):
         if not self.personas:

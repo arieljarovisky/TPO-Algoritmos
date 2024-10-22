@@ -1,13 +1,10 @@
+from flask import Flask
+from rutas import rutas  # Importa el blueprint de rutas
 
+app = Flask(__name__)
 
-from sistema.sistema import Sistema 
+# Registrar el blueprint de personas
+app.register_blueprint(rutas)
 
-sistema = Sistema()
-
-sistema.ingresar_datos()
-
-print("Edad máxima:", sistema.edad_maxima())
-print("Edad mínima:", sistema.edad_minima())
-print("Promedio de edad:", sistema.edad_promedio())
-print("Promedio de monto a declarar:", sistema.monto_promedio())
-print("Monto máximo a declarar:", sistema.monto_maximo())
+if __name__ == '__main__':
+    app.run(debug=True)
