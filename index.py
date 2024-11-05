@@ -1,4 +1,12 @@
-personas = []
+nombres = []
+apellidos = []
+edades = []
+fechas_nacimiento = []
+documentos = []
+profesiones = []
+fechas_declaracion = []
+montos_declarar = []
+origenes_fondos = []
 
 
 def enterData():
@@ -6,56 +14,64 @@ def enterData():
         input("Si quiere ingresar al sistema apriete el 1, para salir ingrese 0: ")
     )
     while continuar != 0:
-        nombre = input("Ingrese nombre: ")
-        apellido = input("Ingrese apellido: ")
-        edad = int(input("Ingrese edad: "))
-        fecha_nacimiento = input("Ingrese fecha de nacimiento (DD/MM/AAAA): ")
-        dni = int(input("Ingrese DNI: "))
-        profesion = input("Ingrese profesión: ")
-        fecha_declaracion = input("Ingrese fecha de declaración (DD/MM/AAAA): ")
-        monto_declarar = float(input("Ingrese monto a declarar: "))
-        origen_fondos = input("Ingrese origen de fondos: ")
-
-        personas.append(
-            {
-                "Nombre": nombre,
-                "Apellido": apellido,
-                "Edad": edad,
-                "Fecha_nacimiento": fecha_nacimiento,
-                "Documento": dni,
-                "Profesion": profesion,
-                "Fecha_declaracion": fecha_declaracion,
-                "Monto_declarar": monto_declarar,
-                "Origen_Fondos": origen_fondos,
-            }
-        )
+        nombres.append(input("Ingrese nombre: "))
+        apellidos.append(input("Ingrese apellido: "))
+        edades.append(int(input("Ingrese edad: ")))
+        fechas_nacimiento.append(input("Ingrese fecha de nacimiento (DD/MM/AAAA): "))
+        documentos.append(int(input("Ingrese DNI: ")))
+        profesiones.append(input("Ingrese profesión: "))
+        fechas_declaracion.append(input("Ingrese fecha de declaración (DD/MM/AAAA): "))
+        montos_declarar.append(float(input("Ingrese monto a declarar: ")))
+        origenes_fondos.append(input("Ingrese origen de fondos: "))
 
         continuar = int(input("Para ingresar una nueva persona escriba 1, si no 0: "))
-    return personas
-    
 
-def edadMaxima(personas):
-    edad_maxima = max(persona["Edad"] for persona in personas)
-    return edad_maxima
 
-def edadPromedio(personas):    
-    num_personas = len(personas)
-    total_edad = sum(persona["Edad"] for persona in personas)
-    promedio_edad = total_edad / num_personas if num_personas > 0 else 0
-    return promedio_edad
+def edadMaxima():
+    if not edades:
+        return None
+    max_edad = edades[0]
+    for edad in edades[1:]:
+        if edad > max_edad:
+            max_edad = edad
+    return max_edad
 
-def promedioMonto(personas):
-    num_personas = len(personas)
-    total_monto = sum(persona["Monto_declarar"] for persona in personas)
-    promedio_monto = total_monto / num_personas if num_personas > 0 else 0
-    return promedio_monto
- 
-def edadMinima(personas):
-    edad_minima = min(persona["Edad"] for persona in personas)
-    return edad_minima
-   
-def montoMaximo(personas):
-    monto_maximo = max(persona["Monto_declarar"] for persona in personas)
-    return monto_maximo
+
+def edadMinima():
+    if not edades:
+        return None
+    min_edad = edades[0]
+    for edad in edades[1:]:
+        if edad < min_edad:
+            min_edad = edad
+    return min_edad
+
+
+def edadPromedio():
+    if not edades:
+        return 0
+    total_edad = 0
+    for edad in edades:
+        total_edad += edad
+    return total_edad / len(edades)
+
+
+def promedioMonto():
+    if not montos_declarar:
+        return 0
+    total_monto = 0
+    for monto in montos_declarar:
+        total_monto += monto
+    return total_monto / len(montos_declarar)
+
+
+def montoMaximo():
+    if not montos_declarar:
+        return None
+    max_monto = montos_declarar[0]
+    for monto in montos_declarar[1:]:
+        if monto > max_monto:
+            max_monto = monto
+    return max_monto
 
 
