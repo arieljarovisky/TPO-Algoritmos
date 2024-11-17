@@ -43,6 +43,8 @@ edad_maxima = functions.edadMaxima(edades)
 monto_minimo = functions.montoMinimo(montos_declarar)
 monto_maximo = functions.montoMaximo(montos_declarar)
 ranking_fondos = functions.rankingFondos(origenes_fondos)
+ranking_profesiones = functions.rankingProfesiones(profesiones)
+
 
 print("Promedio de edad:", promedio_edad)
 print("Promedio de monto a declarar:", promedio_monto)
@@ -52,3 +54,4 @@ print("La edad más alta es:", edad_maxima)
 print("El monto más bajo a declarar es:", monto_minimo)
 print("El monto más alto a declarar es:", monto_maximo)
 print("El origen de los fondos mas frecuente es: 1°",ranking_fondos[0],"2°",ranking_fondos[1],"3°",ranking_fondos[2],"4°",ranking_fondos[3],"5°",ranking_fondos[4])
+print("El ranking de profesiones es: 1°",ranking_profesiones[0],"2°",ranking_profesiones[1],"3°",ranking_profesiones[2])

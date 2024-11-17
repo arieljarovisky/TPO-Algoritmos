@@ -160,6 +160,36 @@ def rankingFondos(origenes_fondos):
                 contador[j], contador[j + 1] = contador[j + 1], contador[j]
                 ranking[j], ranking[j + 1] = ranking[j + 1], ranking[j]
     return ranking
+
+def contadorProfesiones(lista_profesiones):
+    profesiones = []
+    conteos = []
+
+    for profesion in lista_profesiones:
+        profesion_normalizada = profesion.lower()
+        if profesion_normalizada in profesiones:
+            indice = profesiones.index(profesion_normalizada)
+            conteos[indice] += 1
+        else:
+            profesiones.append(profesion_normalizada)
+            conteos.append(1)
+
+    return profesiones, conteos
+
+def rankingProfesiones(lista_profesiones):
+    profesiones, conteos = contadorProfesiones(lista_profesiones)
+    n = len(conteos)
+    for i in range(n):
+        for j in range(0, n - i - 1):
+            if conteos[j] < conteos[j + 1]: 
+                conteos[j], conteos[j + 1] = conteos[j + 1], conteos[j]
+                profesiones[j], profesiones[j + 1] = profesiones[j + 1], profesiones[j]
+
+    return profesiones
+
+
+
+
     
 
 
