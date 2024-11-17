@@ -16,7 +16,7 @@ def enterData():
         continuar = input("Si quiere ingresar al sistema apriete el 1, para salir ingrese 0: ")
 
     while continuar == '1':
-        """ nombre = input("Ingrese nombre: ")
+        nombre = input("Ingrese nombre: ")
         while not nombre:
             print("El nombre no puede estar vacío.")
             nombre = input("Ingrese nombre: ")
@@ -63,7 +63,6 @@ def enterData():
             print("El monto no puede estar vacío.")
             monto = input("Ingrese monto a declarar: ")
         montos_declarar.append(float(monto))
-         """
         origen_fondo = input("Ingrese origen de fondos (Ahorro, Inversion, Ingresos,Alquileres, Herencia): ")
         while not origen_fondo or origen_fondo not in validacion_fondos:
             print("El origen de fondos no es valido.")
@@ -157,9 +156,7 @@ def rankingFondos(origenes_fondos):
     n = len(contador)
     for i in range(n):
         for j in range(0, n - i - 1):
-            # Comparar elementos adyacentes
             if contador[j] < contador[j + 1]:
-                # Intercambiar si están en el orden incorrecto
                 contador[j], contador[j + 1] = contador[j + 1], contador[j]
                 ranking[j], ranking[j + 1] = ranking[j + 1], ranking[j]
     return ranking
