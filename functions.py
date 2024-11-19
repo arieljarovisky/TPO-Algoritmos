@@ -1,13 +1,15 @@
+import validations
+
 nombres = []
 apellidos = []
 edades = []
 fechas_nacimiento = []
 documentos = []
-profesiones = []
 fechas_declaracion = []
 montos_declarar = []
 origenes_fondos = []
-validacion_fondos =  [ "Ahorro", "Inversion", "Ingresos", "Alquileres","Herencia"]
+profesiones = []
+
 def enterData():
     continuar = input("Si quiere ingresar al sistema apriete el 1, para salir ingrese 0: ")
     
@@ -16,65 +18,37 @@ def enterData():
         continuar = input("Si quiere ingresar al sistema apriete el 1, para salir ingrese 0: ")
 
     while continuar == '1':
-        nombre = input("Ingrese nombre: ")
-        while not nombre:
-            print("El nombre no puede estar vacío.")
-            nombre = input("Ingrese nombre: ")
+        nombre = validations.validarNombre()
         nombres.append(nombre)
 
-        apellido = input("Ingrese apellido: ")
-        while not apellido:
-            print("El apellido no puede estar vacío.")
-            apellido = input("Ingrese apellido: ")
+        apellido = validations.validarApellido()
         apellidos.append(apellido)
 
-        edad = int(input("Ingrese edad: "))
-        while not edad or edad is not int:
-            print("La edad no es valida.")
-            edad = int(input("Ingrese edad: "))
+        edad = validations.validarEdad()
         edades.append(int(edad))
 
-        fecha_nacimiento = input("Ingrese fecha de nacimiento (DD/MM/AAAA): ")
-        while not fecha_nacimiento:
-            print("La fecha de nacimiento no puede estar vacía.")
-            fecha_nacimiento = input("Ingrese fecha de nacimiento (DD/MM/AAAA): ")
+        fecha_nacimiento = validations.validarFechaNacimiento()
         fechas_nacimiento.append(fecha_nacimiento)
 
-        documento = input("Ingrese DNI: ")
-        while not documento and documento is not int:
-            print("El DNI no es valido.")
-            documento = input("Ingrese DNI: ")
+        documento = validations.validarDNI()
         documentos.append(int(documento))
 
-        profesion = input("Ingrese profesión: ")
-        while not profesion and profesion != "Ahorro":
-            print("La profesión no puede estar vacía.")
-            profesion = input("Ingrese profesión: ")
+        profesion = validations.validarProfesion()
         profesiones.append(profesion)
 
-        fecha_declaracion = input("Ingrese fecha de declaración (DD): ")
-        while not fecha_declaracion and fecha_declaracion is not int:
-            print("La fecha de declaración no es valida.")
-            fecha_declaracion = input("Ingrese fecha de declaración (DD): ")
-        fechas_declaracion.append(fecha_declaracion)
+        fecha_declaracion = validations.validarFechaDeclaracion()
+        fechas_declaracion.append(int(fecha_declaracion))
 
-        monto = input("Ingrese monto a declarar: ")
-        while not monto:
-            print("El monto no puede estar vacío.")
-            monto = input("Ingrese monto a declarar: ")
-        montos_declarar.append(float(monto))
-        origen_fondo = input("Ingrese origen de fondos (Ahorro, Inversion, Ingresos,Alquileres, Herencia): ")
-        while not origen_fondo or origen_fondo not in validacion_fondos:
-            print("El origen de fondos no es valido.")
-            origen_fondo = input("Ingrese origen de fondos: ")
+        monto = validations.validarMonto()
+        montos_declarar.append(float(monto)) 
+
+        origen_fondo = validations.validarOrigenFondos()
         origenes_fondos.append(origen_fondo)
 
         continuar = input("Para ingresar una nueva persona escriba 1, si no 0: ")
         while continuar not in ('1', '0'):
             print("Entrada inválida. Debe ingresar 1 para continuar o 0 para salir.")
             continuar = input("Para ingresar una nueva persona escriba 1, si no 0: ")
-
-
 
 def edadMaxima(edades):
     if not edades:
@@ -85,7 +59,6 @@ def edadMaxima(edades):
             max_edad = edad
     return max_edad
 
-
 def edadMinima(edades):
     if not edades:
         return None
@@ -95,7 +68,6 @@ def edadMinima(edades):
             min_edad = edad
     return min_edad
 
-
 def edadPromedio(edades):
     if not edades:
         return 0
@@ -104,15 +76,23 @@ def edadPromedio(edades):
         total_edad += edad
     return total_edad / len(edades)
 
+def fechaLejana(fechas_declaracion):
+    if not fechas_declaracion:
+        return None
+    fecha_lejana = fechas_declaracion[0]
+    for fecha in fechas_declaracion[1:]:
+        if fecha < fecha_lejana:            # la fecha mas lejana posible seria el primer dia del mes (01)
+            fecha_lejana = fecha
+    return fecha_lejana
 
-def promedioMonto(montos_declarar):
-    if not montos_declarar:
-        return 0
-    total_monto = 0
-    for monto in montos_declarar:
-        total_monto += monto
-    return total_monto / len(montos_declarar)
-
+def fechaCercana(fechas_declaracion):
+    if not fechas_declaracion:
+        return None
+    fecha_cercana = fechas_declaracion[0]
+    for fecha in fechas_declaracion[1:]:
+        if fecha > fecha_cercana:           # la fecha mas cercana posible seria el ultimo dia del mes (31)
+            fecha_cercana = fecha
+    return fecha_cercana    
 
 def montoMaximo(montos_declarar):
     if not montos_declarar:
@@ -122,6 +102,7 @@ def montoMaximo(montos_declarar):
         if monto > max_monto:
             max_monto = monto
     return max_monto
+
 def montoMinimo(montos_declarar):
     if not montos_declarar:
         return None
@@ -130,6 +111,40 @@ def montoMinimo(montos_declarar):
         if monto < min_monto:
             min_monto = monto
     return min_monto
+
+def promedioMonto(montos_declarar):
+    if not montos_declarar:
+        return 0
+    total_monto = 0
+    for monto in montos_declarar:
+        total_monto += monto
+    return total_monto / len(montos_declarar)
+
+def contadorProfesiones(lista_profesiones):
+    profesionesFiltradas = []
+    conteos = []
+
+    for profesion in lista_profesiones:
+        profesion_normalizada = profesion.lower()
+        if profesion_normalizada in profesionesFiltradas:
+            indice = profesionesFiltradas.index(profesion_normalizada)
+            conteos[indice] += 1
+        else:
+            profesionesFiltradas.append(profesion_normalizada)
+            conteos.append(1)
+
+    return profesionesFiltradas, conteos
+
+def rankingProfesiones(lista_profesiones):
+    profesionesFiltradas, conteos = contadorProfesiones(lista_profesiones)
+    n = len(conteos)
+    for i in range(n):
+        for j in range(0, n - i - 1):
+            if conteos[j] < conteos[j + 1]: 
+                conteos[j], conteos[j + 1] = conteos[j + 1], conteos[j]
+                profesionesFiltradas[j], profesionesFiltradas[j + 1] = profesionesFiltradas[j + 1], profesionesFiltradas[j]
+
+    return profesionesFiltradas
 
 def contadorFondos(origenes_fondos):
     ahorro = 0
@@ -161,35 +176,9 @@ def rankingFondos(origenes_fondos):
                 ranking[j], ranking[j + 1] = ranking[j + 1], ranking[j]
     return ranking
 
-def contadorProfesiones(lista_profesiones):
-    profesiones = []
-    conteos = []
-
-    for profesion in lista_profesiones:
-        profesion_normalizada = profesion.lower()
-        if profesion_normalizada in profesiones:
-            indice = profesiones.index(profesion_normalizada)
-            conteos[indice] += 1
-        else:
-            profesiones.append(profesion_normalizada)
-            conteos.append(1)
-
-    return profesiones, conteos
-
-def rankingProfesiones(lista_profesiones):
-    profesiones, conteos = contadorProfesiones(lista_profesiones)
-    n = len(conteos)
-    for i in range(n):
-        for j in range(0, n - i - 1):
-            if conteos[j] < conteos[j + 1]: 
-                conteos[j], conteos[j + 1] = conteos[j + 1], conteos[j]
-                profesiones[j], profesiones[j + 1] = profesiones[j + 1], profesiones[j]
-
-    return profesiones
-
-
-
-
-    
-
-
+def mostrarRanking(lista_raking):
+    ranking = ""
+    for puesto in lista_raking:
+        i = lista_raking.index(puesto) + 1
+        ranking+=(f"{i}° {puesto} ")
+    return ranking
